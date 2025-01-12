@@ -14,3 +14,6 @@ spring:
     format:
       date: yyyy-MM-dd
     static-path-pattern: /static/**
+
+remember:
+  secret-key: FRuxUzOspAhlYlMuDreUeh6yup0wriPux3FlKLpR2k4ml7eN
