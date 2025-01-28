@@ -27,8 +27,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/user/**").hasAnyAuthority("USER", "MODERATOR", "ADMIN")
-                        .requestMatchers("/admin/**").hasAnyAuthority("MODERATOR", "ADMIN")
+                        .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority( "ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

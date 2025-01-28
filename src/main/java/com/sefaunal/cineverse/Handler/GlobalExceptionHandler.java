@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleGeneralException(Exception ex) {
         printException(500, ex.getMessage());
-        return "Error.html";
+        return "Error";
     }
 
     private void printException(int statusCode, String errMessage) {

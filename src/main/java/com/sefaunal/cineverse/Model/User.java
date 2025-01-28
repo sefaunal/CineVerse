@@ -53,6 +53,10 @@ public class User implements UserDetails {
 
     private Instant accountCreationDate;
 
+    private boolean isAccountNonLocked;
+
+    private boolean isAccountEnabled;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(role));
@@ -75,7 +79,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override
@@ -85,6 +89,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isAccountEnabled;
     }
 }

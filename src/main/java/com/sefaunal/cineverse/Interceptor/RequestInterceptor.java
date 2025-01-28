@@ -22,14 +22,14 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         // Log requested method type
         String method = request.getMethod();
-        LOG.info("Requested Method Type: " + method);
+        LOG.info("Requested Method Type: {}", method);
 
         // Log requested URI
         String uri = request.getRequestURI();
-        LOG.info("Requested URI: " + uri);
+        LOG.info("Requested URI: {}", uri);
 
         // Log user's environment
-        LOG.info("User's Environment: " + CommonUtils.getUserEnvironment(request));
+        LOG.info("User's Environment: {}", CommonUtils.getUserEnvironment(request));
 
         // Log user's IP address
         LOG.info("User's IP Address: {}", CommonUtils.getIpAddress(request));
