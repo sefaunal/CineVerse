@@ -88,13 +88,16 @@
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>
-                    <li>
-                        <div class="dropdown-divider"></div>
-                    </li>
                     <li th:if="${user.role == 'ADMIN'}">
                         <a class="dropdown-item" href="/admin/panel">
                             <i class="bx bxs-user-detail me-2"></i>
                             <span class="align-middle">Admin Panel</span>
+                        </a>
+                    </li>
+                    <li th:if="${user.role == 'ADMIN'}">
+                        <a class="dropdown-item" href="/content/panel/actors">
+                            <i class="bx bx-cog me-2"></i>
+                            <span class="align-middle">Content Panel</span>
                         </a>
                     </li>
                     <li>
