@@ -15,9 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 
@@ -40,7 +42,22 @@ public class ContentPanelController {
     private static final Integer REQUEST_SIZE = 50;
 
     @GetMapping("/panel/actors")
-    public ModelAndView contentPanelActorList(@RequestParam(defaultValue = "1") int page,
+    public RedirectView redirectToActorsPage() {
+        return new RedirectView("/content/panel/actors/none");
+    }
+
+    @GetMapping("/panel/genres")
+    public RedirectView redirectToGenresPage() {
+        return new RedirectView("/content/panel/genres/none");
+    }
+
+    @GetMapping("/panel/languages")
+    public RedirectView redirectToLanguagesPage() {
+        return new RedirectView("/content/panel/languages/none");
+    }
+
+    @GetMapping("/panel/actors/{status}")
+    public ModelAndView contentPanelActorList(@PathVariable String status, @RequestParam(defaultValue = "1") int page,
                                        Principal principal,
                                        Model model) {
         User user = userService.findUserByUsername(principal.getName());
@@ -53,11 +70,13 @@ public class ContentPanelController {
         model.addAttribute("totalPages", actors.getTotalPages());
 
         model.addAttribute("user", user);
+
+        model.addAttribute("status", status);
         return new ModelAndView("panel/ActorList");
     }
 
-    @GetMapping("/panel/genres")
-    public ModelAndView contentPanelGenreList(@RequestParam(defaultValue = "1") int page,
+    @GetMapping("/panel/genres/{status}")
+    public ModelAndView contentPanelGenreList(@PathVariable String status, @RequestParam(defaultValue = "1") int page,
                                               Principal principal,
                                               Model model) {
         User user = userService.findUserByUsername(principal.getName());
@@ -70,11 +89,13 @@ public class ContentPanelController {
         model.addAttribute("totalPages", genres.getTotalPages());
 
         model.addAttribute("user", user);
+
+        model.addAttribute("status", status);
         return new ModelAndView("panel/GenreList");
     }
 
-    @GetMapping("/panel/languages")
-    public ModelAndView contentPanelLanguageList(@RequestParam(defaultValue = "1") int page,
+    @GetMapping("/panel/languages/{status}")
+    public ModelAndView contentPanelLanguageList(@PathVariable String status, @RequestParam(defaultValue = "1") int page,
                                               Principal principal,
                                               Model model) {
         User user = userService.findUserByUsername(principal.getName());
@@ -87,6 +108,8 @@ public class ContentPanelController {
         model.addAttribute("totalPages", languages.getTotalPages());
 
         model.addAttribute("user", user);
+
+        model.addAttribute("status", status);
         return new ModelAndView("panel/LanguageList");
     }
 }

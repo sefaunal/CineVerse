@@ -60,6 +60,26 @@
 
                 <div class="container-xxl flex-grow-1 container-p-y">
 
+                    <!-- Toast with Placements -->
+                    <div
+                            id="notification-toast"
+                            class="bs-toast toast toast-placement-ex m-2 fade top-0 end-0"
+                            role="alert"
+                            aria-live="assertive"
+                            aria-atomic="true"
+                            data-bs-delay="2000">
+                        <div class="toast-header">
+                            <i class="bx bx-bell me-2"></i>
+                            <div class="me-auto fw-medium">CineVerse</div>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${status} == 'updateSuccess'" class="toast-body">Record has been successfully updated</div>
+                        <div th:if="${status} == 'additionSuccess'" class="toast-body">Record has been successfully added</div>
+                        <div th:if="${status} == 'passwordsDoNotMatch'" class="toast-body">Update Failed! Passwords you entered does not match!</div>
+                        <div th:if="${status} == 'recordAlreadyExists'" class="toast-body">Save/Update Failed! A Record with the same name already exists!</div>
+                    </div>
+                    <!-- Toast with Placements -->
+
                     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Content Panel /</span> Genres</h4>
 
                     <div class="row">
@@ -122,9 +142,9 @@
                                                     <i class="bx bx-dots-vertical-rounded"></i>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" th:href = "@{/content/panel/genre/???(ID=${genre.getID()})}">
-                                                        <i class="bx bx-minus me-1"></i>
-                                                        ???
+                                                    <a class="dropdown-item" th:href = "@{/content/genre/update(ID=${genre.getID()})}">
+                                                        <i class="bx bx-edit-alt me-1"></i>
+                                                        Edit
                                                     </a>
                                                 </div>
                                             </td>
@@ -194,6 +214,22 @@
     <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
+
+<script th:if="${status} == 'updateSuccess' or ${status} == 'additionSuccess'">
+    window.addEventListener("load", function() {
+      const modal = document.getElementById("notification-toast");
+      modal.classList.add("show");
+      modal.classList.add("bg-secondary");
+    });
+</script>
+
+<script th:if="${status} == 'passwordsDoNotMatch' or ${status} == 'recordAlreadyExists'">
+    window.addEventListener("load", function() {
+      const modal = document.getElementById("notification-toast");
+      modal.classList.add("show");
+      modal.classList.add("bg-danger");
+    });
+</script>
 
 <script src="/static/js/Sneat/jquery.js"></script>
 <script src="/static/js/Sneat/popper.js"></script>
