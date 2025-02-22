@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * @author github.com/sefaunal
@@ -32,6 +33,10 @@ public class GenreService {
 
     public Page<Genre> findAllWithPageable(Pageable pageable) {
         return genreRepository.findAll(pageable);
+    }
+
+    public List<Genre> findAll() {
+        return genreRepository.findAll();
     }
 
     public Genre findRecordByID(String ID) {

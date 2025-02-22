@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modal</title>
+</head>
+<body>
+
+<div th:fragment="addMovie" class="modal fade" id="addMovieModal" style="display: none" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Movie</h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+
+                </button>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" th:action="@{/content/movie/save}">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameWithTitle" class="form-label">Movie Name</label>
+                            <input
+                                    name="movieName"
+                                    type="text"
+                                    id="nameWithTitle"
+                                    class="form-control"
+                                    placeholder="Movie Name"
+                                    required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="movieDescription" class="form-label">Movie Description</label>
+                            <input
+                                    name="movieDescription"
+                                    type="text"
+                                    id="movieDescription"
+                                    class="form-control"
+                                    placeholder="Movie Description"
+                                    required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="movieReleaseDate" class="form-label">Movie Release Date</label>
+                            <input
+                                    name="movieReleaseDate"
+                                    type="date"
+                                    id="movieReleaseDate"
+                                    class="form-control"
+                                    placeholder="Movie Release Date"
+                                    required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="movieRating" class="form-label">Movie Release Rating</label>
+                            <input
+                                    name="movieRating"
+                                    type="number" min="0" max="10" step="0.1"
+                                    id="movieRating"
+                                    class="form-control"
+                                    placeholder="IMDB Rating"
+                                    required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="movieTrailer" class="form-label">Movie Release Trailer Link</label>
+                            <input
+                                    name="movieTrailer"
+                                    type="text"
+                                    id="movieTrailer"
+                                    class="form-control"
+                                    placeholder="Trailer Link"
+                                    required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-0">
+                            <div class="mb-3">
+                                <label for="FileToBeChecked" class="form-label">Movie Image*</label>
+                                <input class="form-control" type="file" accept="image/*" id="FileToBeChecked" name="movieImage" required/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label class="form-label">Movie Actors</label>
+                            <select multiple data-live-search="true" name="movieActors" id="movieActors" required>
+                                <div th:each="actor:${actors}">
+                                    <option th:text="${actor.getActorName()}" th:value="${actor.getID()}">Actors</option>
+                                </div>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label class="form-label">Movie Genres</label>
+                            <select multiple data-live-search="true" name="movieGenres" id="movieGenres" required>
+                                <div th:each="genre:${genres}">
+                                    <option th:text="${genre.getGenreName()}" th:value="${genre.getID()}">Actors</option>
+                                </div>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label class="form-label">Movie Languages</label>
+                            <select multiple data-live-search="true" name="movieLanguages" id="movieLanguages" required>
+                                <div th:each="language:${languages}">
+                                    <option th:text="${language.getLanguageName()}" th:value="${language.getID()}">Actors</option>
+                                </div>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -3,10 +3,12 @@ package com.sefaunal.cineverse.Controller;
 import com.sefaunal.cineverse.Model.Actor;
 import com.sefaunal.cineverse.Model.Genre;
 import com.sefaunal.cineverse.Model.Language;
+import com.sefaunal.cineverse.Model.Movie;
 import com.sefaunal.cineverse.Model.User;
 import com.sefaunal.cineverse.Service.ActorService;
 import com.sefaunal.cineverse.Service.GenreService;
 import com.sefaunal.cineverse.Service.LanguageService;
+import com.sefaunal.cineverse.Service.MovieService;
 import com.sefaunal.cineverse.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author github.com/sefaunal
@@ -36,6 +40,8 @@ public class ContentPanelController {
     private final GenreService genreService;
 
     private final LanguageService languageService;
+
+    private final MovieService movieService;
 
     private final UserService userService;
 
@@ -54,6 +60,11 @@ public class ContentPanelController {
     @GetMapping("/panel/languages")
     public RedirectView redirectToLanguagesPage() {
         return new RedirectView("/content/panel/languages/none");
+    }
+
+    @GetMapping("/panel/movies")
+    public RedirectView redirectToMoviesPage() {
+        return new RedirectView("/content/panel/movies/none");
     }
 
     @GetMapping("/panel/actors/{status}")
@@ -111,5 +122,51 @@ public class ContentPanelController {
 
         model.addAttribute("status", status);
         return new ModelAndView("panel/LanguageList");
+    }
+
+    @GetMapping("/panel/movies/{status}")
+    public ModelAndView contentPanelMovieList(@PathVariable String status, @RequestParam(defaultValue = "1") int page,
+                                                 Principal principal,
+                                                 Model model) {
+        User user = userService.findUserByUsername(principal.getName());
+
+        Pageable pageable = PageRequest.of(page - 1, REQUEST_SIZE);
+        Page<Movie> movies = movieService.findAllWithPageable(pageable);
+
+        List<Movie> updatedMovies = movies.getContent();
+        updatedMovies.forEach(movie -> {
+            movie.setMovieActors(movie.getMovieActors().stream()
+                    .map(actorService::findRecordByID)
+                    .map(Actor::getActorName)
+                    .collect(Collectors.toList()));
+
+            movie.setMovieLanguages(movie.getMovieLanguages().stream()
+                    .map(languageService::findRecordByID)
+                    .map(Language::getLanguageName)
+                    .collect(Collectors.toList()));
+
+            movie.setMovieGenres(movie.getMovieGenres().stream()
+                    .map(genreService::findRecordByID)
+                    .map(Genre::getGenreName)
+                    .collect(Collectors.toList()));
+        });
+
+        model.addAttribute("movieList", movies.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", movies.getTotalPages());
+
+        List<Actor> actors = actorService.findAll();
+        model.addAttribute("actors", actors);
+
+        List<Genre> genres = genreService.findAll();
+        model.addAttribute("genres", genres);
+
+        List<Language> languages = languageService.findAll();
+        model.addAttribute("languages", languages);
+
+        model.addAttribute("user", user);
+
+        model.addAttribute("status", status);
+        return new ModelAndView("panel/MovieList");
     }
 }

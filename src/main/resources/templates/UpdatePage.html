@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="/static/css/Sneat/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="/static/css/Sneat/demo.css" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
+
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="/static/css/Sneat/perfect-scrollbar.css" />
 
@@ -76,6 +79,9 @@
                                     <a class="nav-link" href="/content/panel/languages"><i class="bx bx-book-content me-1"></i> Languages</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" href="/content/panel/movies"><i class="bx bx-movie me-1"></i> Movies</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link active" href="#"><i class="bx bx-edit me-1"></i> Update</a>
                                 </li>
                             </ul>
@@ -90,6 +96,10 @@
 
                             <div th:if="${updateType.equals('LANGUAGE')}">
                                 <div th:replace="modals/UpdateLanguage :: language"></div>
+                            </div>
+
+                            <div th:if="${updateType.equals('MOVIE')}">
+                                <div th:replace="modals/UpdateMovie :: movie"></div>
                             </div>
                         </div>
                     </div>
@@ -110,6 +120,12 @@
     <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
+
+<script>
+    new MultiSelectTag('movieActorsUpdate')  // id
+    new MultiSelectTag('movieGenresUpdate')  // id
+    new MultiSelectTag('movieLanguagesUpdate')  // id
+</script>
 
 <script src="/static/js/Sneat/jquery.js"></script>
 <script src="/static/js/Sneat/popper.js"></script>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update</title>
+</head>
+<body>
+
+<!--Movie Update-->
+<div th:fragment="movie" class="card mb-4">
+    <h5 class="card-header">Update Movie</h5>
+    <div class="card-body">
+
+        <form id="updateMovie" enctype="multipart/form-data" th:action="@{/content/movie/update}" method="post">
+<!--            Hidden Parts-->
+            <input name="creationDate" th:value="${movie.creationDate}" hidden="hidden" readonly>
+            <input name="movieImageURI" th:value="${movie.movieImageURI}" hidden="hidden" readonly>
+
+            <div class="mb-3 col-md-6">
+                <div class="col mb-3">
+                    <label class="form-label" for="movieID">Movie ID</label>
+                    <div class="input-group">
+                        <input
+                                th:value="${movie.ID}"
+                                name="ID"
+                                type="text"
+                                class="form-control"
+                                id="movieID"
+                                placeholder="Movie ID"
+                                aria-describedby="defaultFormControlHelp"
+                                required
+                                readonly
+                        />
+                    </div>
+                </div>
+
+                    <div class="col mb-3">
+                        <label for="nameWithTitle" class="form-label">Movie Name</label>
+                        <input
+                                th:value="${movie.movieName}"
+                                name="movieName"
+                                type="text"
+                                id="nameWithTitle"
+                                class="form-control"
+                                placeholder="Movie Name"
+                                required />
+                    </div>
+
+                    <div class="col mb-3">
+                        <label for="movieDescription" class="form-label">Movie Description</label>
+                        <input
+                                th:value="${movie.movieDescription}"
+                                name="movieDescription"
+                                type="text"
+                                id="movieDescription"
+                                class="form-control"
+                                placeholder="Movie Description"
+                                required />
+                    </div>
+
+                    <div class="col mb-3">
+                        <label for="movieReleaseDate" class="form-label">Movie Release Date</label>
+                        <input
+                                th:value="${#dates.format(movie.movieReleaseDate, 'yyyy-MM-dd')}"
+                                name="movieReleaseDate"
+                                type="date"
+                                id="movieReleaseDate"
+                                class="form-control"
+                                placeholder="Movie Release Date"
+                                required />
+                    </div>
+
+                    <div class="col mb-3">
+                        <label for="movieRating" class="form-label">Movie Release Rating</label>
+                        <input
+                                th:value="${movie.movieRating}"
+                                name="movieRating"
+                                type="number" min="0" max="10" step="0.1"
+                                id="movieRating"
+                                class="form-control"
+                                placeholder="IMDB Rating"
+                                required />
+                    </div>
+
+                    <div class="col mb-3">
+                        <label for="movieTrailer" class="form-label">Movie Release Trailer Link</label>
+                        <input
+                                th:value="${movie.movieTrailer}"
+                                name="movieTrailer"
+                                type="text"
+                                id="movieTrailer"
+                                class="form-control"
+                                placeholder="Trailer Link"
+                                required />
+                    </div>
+
+                    <div class="col mb-0">
+                        <div class="mb-3">
+                            <label for="FileToBeChecked" class="form-label">Movie Image*</label>
+                            <input class="form-control" type="file" accept="image/*" id="FileToBeChecked" name="movieImage"/>
+                        </div>
+                    </div>
+
+                    <div class="col mb-3">
+                        <label class="form-label">Movie Actors</label>
+                        <select multiple data-live-search="true" name="movieActors" id="movieActorsUpdate" required>
+                            <div th:each="actor:${actors}">
+                                <option
+                                        th:text="${actor.getActorName()}"
+                                        th:value="${actor.getID()}"
+                                        th:selected="${movie.movieActors.contains(actor.ID)}">Actors
+                                </option>
+                            </div>
+                        </select>
+                    </div>
+
+                    <div class="col mb-3">
+                        <label class="form-label">Movie Genres</label>
+                        <select multiple data-live-search="true" name="movieGenres" id="movieGenresUpdate" required>
+                            <div th:each="genre:${genres}">
+                                <option th:text="${genre.getGenreName()}"
+                                        th:value="${genre.getID()}"
+                                        th:selected="${movie.movieGenres.contains(genre.ID)}">Genres</option>
+                            </div>
+                        </select>
+                    </div>
+
+                    <div class="col mb-3">
+                        <label class="form-label">Movie Languages</label>
+                        <select multiple data-live-search="true" name="movieLanguages" id="movieLanguagesUpdate" required>
+                            <div th:each="language:${languages}">
+                                <option th:text="${language.getLanguageName()}"
+                                        th:value="${language.getID()}"
+                                        th:selected="${movie.movieLanguages.contains(language.ID)}">Language</option>
+                            </div>
+                        </select>
+                    </div>
+                </div>
+
+            <div class="mb-3 col-md-6">
+                <div class="form-password-toggle">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-group">
+                        <input
+                                minlength="8"
+                                id="password"
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                aria-describedby="basic-default-password2"
+                                required
+                        />
+                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary me-2">Update Actor</button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
