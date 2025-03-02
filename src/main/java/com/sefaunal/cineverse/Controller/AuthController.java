@@ -2,11 +2,14 @@ package com.sefaunal.cineverse.Controller;
 
 import com.sefaunal.cineverse.Model.User;
 import com.sefaunal.cineverse.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 
@@ -36,7 +40,7 @@ public class AuthController {
                 User user = userService.findUserByUsername(principal.getName());
                 if (user.getRole().equals("ADMIN")){
                     httpServletResponse.sendRedirect("/admin/panel");
-                }else {
+                } else {
                     httpServletResponse.sendRedirect("/home");
                 }
             }catch (Exception e){
@@ -44,6 +48,16 @@ public class AuthController {
             }
         }
         return "LoginPage";
+    }
+
+    @GetMapping("/logout")
+    public RedirectView logout(HttpServletRequest request, HttpServletResponse response) {
+        // Invalidating the session and clearing the authentication context
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
+        // Redirecting to the home page or login page
+        return new RedirectView("/home");
     }
 
     @GetMapping("/register")

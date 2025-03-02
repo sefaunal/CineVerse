@@ -6,14 +6,16 @@ import com.sefaunal.cineverse.Utils.CommonUtils;
 import com.sefaunal.cineverse.Utils.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.awt.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author github.com/sefaunal
@@ -45,6 +47,26 @@ public class MovieService {
 
     public Page<Movie> findAllWithPageable(Pageable pageable) {
         return movieRepository.findAll(pageable);
+    }
+
+    public Page<Movie> searchMovies(String searchParam, Pageable pageable) {
+        List<Movie> potentialMatches = movieRepository.findAllByMovieName(searchParam);
+
+        // Filter movies where searchParam is at least 50% of the movie name
+        List<Movie> filteredMovies = potentialMatches.stream()
+                .filter(movie -> {
+                    String movieName = movie.getMovieName().toLowerCase();
+                    int requiredLength = (int) Math.ceil(movieName.length() * 0.4); // 40% of movie name
+                    return searchParam.length() >= requiredLength;
+                })
+                .collect(Collectors.toList());
+
+        // Apply pagination manually
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filteredMovies.size());
+        List<Movie> paginatedMovies = filteredMovies.subList(start, end);
+
+        return new PageImpl<>(paginatedMovies, pageable, filteredMovies.size());
     }
 
     public Movie findRecordByID(String ID) {
