@@ -1,7 +1,9 @@
 package com.sefaunal.cineverse.Controller;
 
+import com.sefaunal.cineverse.Model.Actor;
 import com.sefaunal.cineverse.Model.Movie;
 import com.sefaunal.cineverse.Model.User;
+import com.sefaunal.cineverse.Service.ActorService;
 import com.sefaunal.cineverse.Service.MovieService;
 import com.sefaunal.cineverse.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * @author github.com/sefaunal
@@ -26,6 +29,7 @@ import java.security.Principal;
 public class HomeController {
     private final UserService userService;
     private final MovieService movieService;
+    private final ActorService actorService;
 
     private static final Integer REQUEST_SIZE = 10;
 
@@ -82,8 +86,61 @@ public class HomeController {
         return new ModelAndView("MaintenancePage"); // TODO Implement Movie Details Page
     }
 
+    @GetMapping("/home/movies/actor")
+    public ModelAndView moviesPageListedByActors(Principal principal, Model model,
+                                                 @RequestParam(defaultValue = "1") int page,
+                                                 @RequestParam("ID") String actorID) {
+        if (principal == null) {
+            model.addAttribute("user", null);
+        } else {
+            User user = userService.findUserByUsername(principal.getName());
+            model.addAttribute("user", user);
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, REQUEST_SIZE);
+        Page<Movie> movies = movieService.findMoviesByActorID(actorID, pageable);
+        model.addAttribute("movies", movies.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", movies.getTotalPages());
+
+        return new ModelAndView("MoviesPage");
+    }
+
     @GetMapping("/home/actors")
     public ModelAndView actorsPage(Principal principal, Model model, @RequestParam(defaultValue = "1") int page) {
-        return new ModelAndView("MaintenancePage"); // TODO Implement Actors Page
+        if (principal == null) {
+            model.addAttribute("user", null);
+        } else {
+            User user = userService.findUserByUsername(principal.getName());
+            model.addAttribute("user", user);
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, REQUEST_SIZE);
+        Page<Actor> actors = actorService.findAllWithPageable(pageable);
+        model.addAttribute("actors", actors.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", actors.getTotalPages());
+
+        return new ModelAndView("ActorsPage");
+    }
+
+    @GetMapping("/home/actors/search")
+    public ModelAndView actorsPageWithSearch(Principal principal, Model model,
+                                             @RequestParam(defaultValue = "1") int page,
+                                             @RequestParam String param) {
+        if (principal == null) {
+            model.addAttribute("user", null);
+        } else {
+            User user = userService.findUserByUsername(principal.getName());
+            model.addAttribute("user", user);
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, REQUEST_SIZE);
+        Page<Actor> actors = actorService.searchActors(param, pageable);
+        model.addAttribute("actors", actors.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", actors.getTotalPages());
+
+        return new ModelAndView("ActorsPage");
     }
 }

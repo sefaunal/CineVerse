@@ -49,10 +49,14 @@ public class MovieService {
         return movieRepository.findAll(pageable);
     }
 
+    public Page<Movie> findMoviesByActorID(String ID, Pageable pageable) {
+        return movieRepository.findAllByActorID(ID, pageable);
+    }
+
     public Page<Movie> searchMovies(String searchParam, Pageable pageable) {
         List<Movie> potentialMatches = movieRepository.findAllByMovieName(searchParam);
 
-        // Filter movies where searchParam is at least 50% of the movie name
+        // Filter movies where searchParam is at least 40% of the movie name
         List<Movie> filteredMovies = potentialMatches.stream()
                 .filter(movie -> {
                     String movieName = movie.getMovieName().toLowerCase();

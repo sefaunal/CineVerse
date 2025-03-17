@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -29,8 +30,8 @@ public class ActorController {
     private final UserService userService;
 
     @PostMapping("/save")
-    public RedirectView saveActor(@ModelAttribute Actor actor) {
-        return actorService.saveActor(actor);
+    public RedirectView saveActor(@ModelAttribute Actor actor, @RequestParam MultipartFile actorImage) {
+        return actorService.saveActor(actor, actorImage);
     }
 
     @GetMapping("/update")
@@ -46,9 +47,9 @@ public class ActorController {
     }
 
     @PostMapping("update")
-    public RedirectView updateActorRecord(@ModelAttribute Actor actor, @RequestParam String password, Principal principal) {
+    public RedirectView updateActorRecord(@ModelAttribute Actor actor, @RequestParam MultipartFile actorImage, @RequestParam String password, Principal principal) {
         User user = userService.findUserByUsername(principal.getName());
 
-        return actorService.updateRecordByID(actor, user.getPassword(), password);
+        return actorService.updateRecordByID(actor, actorImage, user.getPassword(), password);
     }
 }

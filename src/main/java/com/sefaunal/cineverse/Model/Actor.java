@@ -20,5 +20,7 @@ public class Actor {
 
     private String actorGender;
 
+    private String actorImageURI;
+
     private Instant creationDate;
 }

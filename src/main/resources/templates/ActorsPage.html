@@ -1,0 +1,129 @@
+ <html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Movie List</title>
+    <link rel="stylesheet" href="/static/css/home.css"/>
+    <link rel="shortcut icon" href="/static/images/favicon-movie.png"/>
+
+    <!--==Import-poppins-font====================-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <!--==Import-Monoton-Font====================-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    
+    <!--==Using-Font-Awesome======================-->
+    <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+    
+    </head>
+    <body>
+        <!--==Navigation===================================-->
+        <nav class="navigation">
+            <!--menu-btn--------------->
+            <input type="checkbox" class="menu-btn" id="menu-btn">
+            <label for="menu-btn" class="menu-icon">
+                <span class="nav-icon"></span>
+            </label>
+            <!--logo------------------->
+            <a class="logo" href="/home">MOVIE LIST</a>
+            <!--menu------------------->
+            <ul class="menu">
+                <li th:if= "${user != null}" ><a th:text="${'Welcome ' + user.firstName} + ' :)'"></a></li>
+                <br>
+                <li th:if= "${user?.role == 'ADMIN' }"><a href="/admin/panel">Admin Panel</a></li>
+                <li th:if= "${user?.role == 'ADMIN' }"><a href="/content/panel/actors">Content Panel</a></li>
+                <li><a href="/home/movies">Movies</a></li>
+                <li><a href="/home/actors">Actors</a></li>
+                <li th:if= "${user == null}"><a href="/auth/login">Login</a></li>
+                <li th:if= "${user != null}"><a href="/auth/logout">Logout</a></li>
+            </ul>
+
+            <!--Search-box------------->
+            <form action="/home/actors/search" method="get" class="search-box">
+                <!--input-->
+                <input type="text" name="param" placeholder="Search Actor" class="search-input" required/>
+                <!--btn-->
+                <button type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </nav>
+        <!--nav-end-->
+
+        <section id="latest">
+            <!--heading-------->
+            <div class="latest-heading">
+                <h1>Actors</h1>
+            </div>
+
+            <!--container------->
+            <div class="post-container">
+                <!--post-box-1------------>
+                <div class="post-box" th:each="actor:${actors}">
+                    <!--img-->
+                    <div class="post-img">
+                        <img alt="actor_img" th:src="${actor.getActorImageURI()}">
+                    </div>
+
+                    <!--text---------->
+                <div class="main-slider-text">
+                    <span></span>
+                    <!--bottom-text-->
+                    <div class="bottom-text">
+                        <!--name----->
+                        <div class="movie-name">
+                            <a th:href="@{/home/movies/actor(ID=${actor.getID()})}" th:text="${actor.getActorName()}">Actor X</a>
+                        </div>
+                        <!--Category-and-rating---->
+                        <div class="category-rating">
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="pagination-container" th:if="${totalPages > 0}">
+                <nav aria-label="Page navigation">
+                    <ul class="custom-pagination">
+                        <li class="page-item first" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/home/actors(page=1)}">&laquo;&laquo;</a>
+                        </li>
+
+                        <li class="page-item prev" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/home/actors(page=${currentPage - 1})}">&laquo;</a>
+                        </li>
+
+                        <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}"
+                            th:classappend="${pageNumber == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/home/actors(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                        </li>
+
+                        <li class="page-item next" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/home/actors(page=${currentPage + 1})}">&raquo;</a>
+                        </li>
+
+                        <li class="page-item last" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/home/actors(page=${totalPages})}">&raquo;&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!--container-end--->
+        </section>
+        <!--latest-post-end------->
+
+        <footer>
+            <!--copyright----->
+            <span class="copyright">
+            2025 - Movie List
+        </span>
+
+        </footer>
+    </body>
+    </html>
