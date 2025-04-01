@@ -57,6 +57,10 @@ public class ActorService {
         return actorRepository.findByID(ID).orElseThrow();
     }
 
+    public List<Actor> findAllByIdIn(List<String> actorIds) {
+        return actorRepository.findAllByIdIn(actorIds);
+    }
+
     public Page<Actor> searchActors(String searchParam, Pageable pageable) {
         List<Actor> potentialMatches = actorRepository.findAllByActorName(searchParam);
 
@@ -87,7 +91,7 @@ public class ActorService {
             return new RedirectView("/content/panel/actors/recordAlreadyExists");
         }
 
-        if (actorImage != null) {
+        if (!actorImage.isEmpty()) {
             String uniqueFileName = ImageUtils.generateUniqueFilename(actor.getActorName(), Objects.requireNonNull(actorImage.getContentType()));
             String newImageURI = ImageUtils.uploadImageToFirebase(actorImage, uniqueFileName);
             actor.setActorImageURI(newImageURI);

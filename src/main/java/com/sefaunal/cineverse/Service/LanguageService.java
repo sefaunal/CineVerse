@@ -43,6 +43,10 @@ public class LanguageService {
         return languageRepository.findByID(ID).orElseThrow();
     }
 
+    public List<Language> findAllByIdIn(List<String> languageIds) {
+        return languageRepository.findAllByIdIn(languageIds);
+    }
+
     public RedirectView updateRecordByID(Language language, String hashedPassword, String rawPassword) {
         Language languageUpdated = languageRepository.findByID(language.getID()).orElseThrow();
 

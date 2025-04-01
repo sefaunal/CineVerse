@@ -43,6 +43,10 @@ public class GenreService {
         return genreRepository.findByID(ID).orElseThrow();
     }
 
+    public List<Genre> findAllByIdIn(List<String> genreIds) {
+        return genreRepository.findAllByIdIn(genreIds);
+    }
+
     public RedirectView updateRecordByID(Genre genre, String hashedPassword, String rawPassword) {
         Genre genreUpdated = genreRepository.findByID(genre.getID()).orElseThrow();
 

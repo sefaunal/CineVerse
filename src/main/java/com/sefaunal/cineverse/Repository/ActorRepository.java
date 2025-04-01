@@ -20,4 +20,7 @@ public interface ActorRepository extends MongoRepository<Actor, String> {
 
     @Query("{ 'actorName': { $regex: ?0, $options: 'i' } }")
     List<Actor> findAllByActorName(String searchParam);
+
+    @Query("{ '_id': { $in: ?0 } }")
+    List<Actor> findAllByIdIn(List<String> actorIds);
 }

@@ -1,0 +1,160 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${movie.getMovieName}"></title>
+
+    <link rel="shortcut icon" href="/static/images/favicon-movie.png"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/home.css"/>
+
+    <!--==Import-poppins-font====================-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+
+    <!--==Import-Monoton-Font====================-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+    <!--==Using-Font-Awesome======================-->
+    <script src="https://kit.fontawesome.com/c8e4d183c2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<!--==Navigation===================================-->
+<nav class="navigation">
+    <!--menu-btn--------------->
+    <input type="checkbox" class="menu-btn" id="menu-btn" th:if= "${user != null}">
+    <label for="menu-btn" class="menu-icon" th:if= "${user != null}">
+        <span class="nav-icon"></span>
+    </label>
+    <!--logo------------------->
+    <!--    <p class="logo">MOVIE LIST</p>-->
+    <a class="logo" href="/home/movies">MOVIE LIST</a>
+    <!--menu------------------->
+    <ul class="menu">
+        <li th:if= "${user != null}" ><a th:text="${'Welcome ' + user.firstName} + ' :)'"></a></li>
+        <br>
+        <li th:if= "${user?.role == 'ADMIN' }"><a href="/admin/panel">Admin Panel</a></li>
+        <li th:if= "${user?.role == 'ADMIN' }"><a href="/content/panel/actors">Content Panel</a></li>
+        <li><a href="/home/movies">Movies</a></li>
+        <li><a href="/home/actors">Actors</a></li>
+        <li th:if= "${user == null}"><a href="/auth/login">Login</a></li>
+        <li th:if= "${user != null}"><a href="/auth/logout">Logout</a></li>
+    </ul>
+</nav>
+<!--nav-end-->
+<!--==Movie-Banner=========================================-->
+<section class="movie-banner">
+    <!--==img==================================-->
+    <div class="m-banner-img">
+        <img alt="movie_img" th:src="${movie.getMovieImageURI()}">
+    </div>
+    <!--content================================-->
+    <div class="banner-container">
+        <!--title-container*******************----->
+        <div class="title-container">
+            <!--title-top===============-->
+            <div class="title-top">
+                <!--title----->
+                <div class="movie-title">
+                    <h1 th:text="${movie.getMovieName()}">Movie Name</h1>
+                </div>
+                <!--more-about-movie-->
+                <div class="more-about-movie">
+                    <div class="rating" th:text="${movie.getMovieRating()}">8.2</div>
+                    <div class="rating"><img alt="imbd" src="/static/images/imdb.png"></div>
+                    <span th:text="${#dates.format(movie.getMovieReleaseDate(), 'yyyy-MM-dd')}">Release Date</span>
+                </div>
+                <!--language--------->
+                <div class="language">
+                    <span th:each="language:${languages}" th:text="${language.getLanguageName()}">Language</span>
+                </div>
+            </div>
+            <!--Title-botttom==========================-->
+            <div class="title-bottom">
+                <!--category------->
+                <div class="category">
+                    <strong>Category</strong><br/>
+                    <a th:each="genre:${genres}" th:text="${genre.getGenreName()}" th:href="@{/home/movies/genre(ID=${genre.getID()})}">Horror</a>
+                </div>
+                <a th:href="${movie.getMovieTrailer()}" class="watch-btn" target="_blank">WATCH TRAILER</a>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!--Banner-end------------->
+<!--details=====================================-->
+<section class="movie-details">
+    <strong th:text="${movie.getMovieName()}">Movie Name</strong>
+    <p th:text="${movie.getMovieDescription()}">Movie Description</p>
+</section>
+<!--==ScreenShots===============================-->
+<section class="screenshots">
+    <strong>Actors</strong>
+    <!--screenshots-container----------->
+    <div class="category" th:each="actor:${actors}">
+        <a th:text="${actor.getActorName()}" th:href="@{/home/movies/actor(ID=${actor.getID()})}">Actor Names</a>
+    </div>
+</section>
+
+
+<section id="latest">
+    <!--heading-------->
+    <div class="latest-heading">
+        <h1>Comments</h1>
+    </div>
+</section>
+
+<!-- Main Body -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-md-6 col-12 pb-4">
+                <div class="comment mt-4 text-justify float-left" th:each="comment:${comments}">
+                    <img th:src="${comment.getUserDetails().getProfileImageURI()}" alt="user_img" class="rounded-circle" width="40" height="40">
+
+                    <span>
+                        <h6 th:text="${comment.getUserDetails().getUsername()}">Username</h6>
+                    </span>
+
+                    <span th:text="${#dates.format(comment.getCommentDate, 'yyyy-MM-dd HH:mm')}">Date</span>
+                    <br>
+                    <p th:text="${comment.getContext()}">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                        Accusamus numquam assumenda hic aliquam vero sequi velit molestias doloremque molestiae dicta?</p>
+                </div>
+
+            </div>
+            <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4" th:if= "${user != null}">
+                <form name="f" id="align-form" th:action="@{/home/movies/details/shareComment(movieID=${movie.getID()})}" method="post">
+                    <div class="form-group">
+                        <h4>Leave a comment</h4>
+                        <label for="context">Message</label>
+                        <textarea id="context" name="context" maxlength="1200" cols="30" rows="5" class="form-control" style="background-color: black;" required></textarea>
+                        <input name="movieID" th:field="${movie.ID}" hidden>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn">Post Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--==footer==============================-->
+<footer>
+    <!--copyright----->
+    <span class="copyright">
+            2022 - Movie List
+        </span>
+</footer>
+</body>
+</html>
+

@@ -2,7 +2,9 @@ package com.sefaunal.cineverse.Repository;
 
 import com.sefaunal.cineverse.Model.Language;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,4 +15,7 @@ public interface LanguageRepository extends MongoRepository<Language, String> {
     Optional<Language> findByID(String ID);
 
     Optional<Language> findByLanguageName(String languageName);
+
+    @Query("{ '_id': { $in: ?0 } }")
+    List<Language> findAllByIdIn(List<String> languageIds);
 }

@@ -23,6 +23,9 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     @Query("{ 'movieActors': { $in: [?0] } }")
     Page<Movie> findAllByActorID(String actorId, Pageable pageable);
 
+    @Query("{ 'movieGenres': { $in: [?0] } }")
+    Page<Movie> findAllByGenreID(String actorId, Pageable pageable);
+
     @Query("{ 'movieName': { $regex: ?0, $options: 'i' } }")
     List<Movie> findAllByMovieName(String searchParam);
 }

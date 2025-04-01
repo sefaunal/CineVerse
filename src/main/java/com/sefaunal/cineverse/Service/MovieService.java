@@ -53,6 +53,10 @@ public class MovieService {
         return movieRepository.findAllByActorID(ID, pageable);
     }
 
+    public Page<Movie> findMoviesByGenreID(String ID, Pageable pageable) {
+        return movieRepository.findAllByGenreID(ID, pageable);
+    }
+
     public Page<Movie> searchMovies(String searchParam, Pageable pageable) {
         List<Movie> potentialMatches = movieRepository.findAllByMovieName(searchParam);
 
@@ -87,7 +91,7 @@ public class MovieService {
             return new RedirectView("/content/panel/movies/recordAlreadyExists");
         }
 
-        if (movieImage != null) {
+        if (!movieImage.isEmpty()) {
             String uniqueFileName = ImageUtils.generateUniqueFilename(movie.getMovieName(), Objects.requireNonNull(movieImage.getContentType()));
             String newImageURI = ImageUtils.uploadImageToFirebase(movieImage, uniqueFileName);
             movie.setMovieImageURI(newImageURI);
