@@ -86,7 +86,10 @@
                         </a>
                     </li>
                     <li>
-                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/user/profile">
+                            <i class="bx bx-cog me-2"></i>
+                            <span class="align-middle">Profile</span>
+                        </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="/home">
@@ -109,7 +112,7 @@
                             <span class="align-middle">Content Panel</span>
                         </a>
                     </li>
-                    <li>
+                    <li th:if="${user.role == 'ADMIN'}">
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>

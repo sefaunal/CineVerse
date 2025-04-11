@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Movie List</title>
+    <title>CineVerse</title>
     <link rel="stylesheet" href="/static/css/home.css"/>
     <link rel="shortcut icon" href="/static/images/favicon-movie.png"/>
 
@@ -30,7 +30,7 @@
                 <span class="nav-icon"></span>
             </label>
             <!--logo------------------->
-            <a class="logo" href="/home">MOVIE LIST</a>
+            <a class="logo" href="/home">CineVerse</a>
             <!--menu------------------->
             <ul class="menu">
                 <li th:if= "${user != null}" ><a th:text="${'Welcome ' + user.firstName} + ' :)'"></a></li>
@@ -39,6 +39,7 @@
                 <li th:if= "${user?.role == 'ADMIN' }"><a href="/content/panel/actors">Content Panel</a></li>
                 <li><a href="/home/movies">Movies</a></li>
                 <li><a href="/home/actors">Actors</a></li>
+                <li th:if= "${user != null}"><a href="/user/profile">Profile</a></li>
                 <li th:if= "${user == null}"><a href="/auth/login">Login</a></li>
                 <li th:if= "${user != null}"><a href="/auth/logout">Logout</a></li>
             </ul>
@@ -121,7 +122,7 @@
         <footer>
             <!--copyright----->
             <span class="copyright">
-            2025 - Movie List
+            2025 - CineVerse
         </span>
 
         </footer>
